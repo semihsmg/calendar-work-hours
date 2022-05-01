@@ -1,5 +1,6 @@
 from icalendar import Calendar
-import math
+
+lookFor = ['game', 'steam', 'helium', 'web', '3D', 'implement', 'asset', 'fix', 'hesap', 'research', 'port']
 
 
 def parse_that():
@@ -8,16 +9,13 @@ def parse_that():
     first_day = None
     last_day = None
 
-    g = open('semih.ics', 'rb')
+    g = open(r'S:\____\Veri\semihsolmazgul@gmail.com.ical\semihsolmazgul@gmail.com.ics', 'rb')
     gcal = Calendar.from_ical(g.read())
 
     for component in gcal.walk():
-        if component.name == "VEVENT":
-            sum = component.get('summary')
-            if ("game" in sum) or ("steam" in sum) or ("hel" in sum) or ("web" in sum) or ("3D" in sum) \
-                    or ("hot" in sum) or ("port" in sum) or ("input" in sum) or ("asset" in sum) \
-                    or ("fix" in sum) or ("hesap" in sum):
-
+        if component.name == 'VEVENT':
+            summary = component.get('summary')
+            if first_substring(lookFor, summary):
                 start = component.get('dtstart').dt
                 end = component.get('dtend').dt
 
@@ -29,8 +27,8 @@ def parse_that():
                 if last_day < start:
                     last_day = start
 
-                # print(sum)
-                # print(start)
+                print(start)
+                print(summary)
                 # print(end)
 
                 totalTime += (end - start).total_seconds() / 3600
@@ -38,10 +36,17 @@ def parse_that():
 
     # print(last_day)
     numberOfDay = (last_day - first_day).total_seconds() / (3600 * 24)
-    print("Number of days: " + str(math.ceil(numberOfDay)))
-    print("Total work hours: " + str(math.ceil(totalTime)))
-    print("Average per day: " + str(math.ceil(totalTime / numberOfDay)))
+    print("Number of days: " + str(round(numberOfDay, 1)))
+    print("Total work hours: " + str(round(totalTime, 1)))
+    print("Average per day: " + str(round(totalTime / numberOfDay, 1)))
     g.close()
+
+
+def first_substring(the_list, substring):
+    for s in the_list:
+        if s in substring:
+            return substring
+    return None
 
 
 if __name__ == '__main__':
