@@ -27,8 +27,8 @@ def parse_that():
                 if last_day < start:
                     last_day = start
 
-                print(start)
-                print(summary)
+                # print(start)
+                # print(summary)
                 # print(end)
 
                 totalTime += (end - start).total_seconds() / 3600
